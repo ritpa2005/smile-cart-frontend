@@ -12,8 +12,8 @@ const Product = () => {
 
   const fetchProduct = async () => {
     try {
-      const response = await productsApi.show();
-      setProduct(response.data);
+      const product = await productsApi.show();
+      setProduct(product);
     } catch (error) {
       console.error(error);
     } finally {
@@ -25,9 +25,15 @@ const Product = () => {
     fetchProduct();
   }, []);
 
-  const { name, description, mrp, offer_price, image_url, image_urls } =
-    product;
-  const discount = (((mrp - offer_price) / mrp) * 100).toFixed(1);
+  const {
+    name,
+    description,
+    mrp,
+    offer_price: offerPrice,
+    image_url: imageUrl,
+    image_urls: imageUrls,
+  } = product;
+  const discount = (((mrp - offerPrice) / mrp) * 100).toFixed(1);
 
   if (isLoading) {
     return (
@@ -41,24 +47,24 @@ const Product = () => {
     <div className="px-6 pb-6">
       <div>
         <Typography className="py-2 text-4xl font-semibold">{name}</Typography>
-        <hr className="border-2 border-black" />
+        <hr className="border-2 border-black" style={{ transform: "90deg" }} />
       </div>
       <div className="mt-6 flex gap-4">
         <div className="w-2/5">
-          {isNotNil(image_urls) ? (
+          {isNotNil(imageUrls) ? (
             <Carousel
-              imageUrls={append(image_url, image_urls)}
+              imageUrls={append(imageUrl, imageUrls)}
               title="Infinix Inbook"
             />
           ) : (
-            <img alt={name} className="w-48" src={image_url} />
+            <img alt={name} className="w-48" src={imageUrl} />
           )}
         </div>
         <div className="w-3/5 space-y-4">
           <Typography>{description}</Typography>
           <Typography>MRP: {mrp}</Typography>
           <Typography className="font-semibold">
-            Offer Price: {offer_price}
+            Offer Price: {offerPrice}
           </Typography>
           <Typography className="font-semibold text-green-600">
             {discount}% off
