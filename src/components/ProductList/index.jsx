@@ -5,7 +5,7 @@ import { Header, PageLoader } from "components/commons";
 import useDebounce from "hooks/useDebounce";
 import { Search } from "neetoicons";
 import { Input, NoData } from "neetoui";
-import { isEmpty, without } from "ramda";
+import { isEmpty } from "ramda";
 
 import ProductListItem from "./ProductListItem";
 
@@ -13,7 +13,6 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchKey, setSearchKey] = useState("");
-  const [cartItems, setCartItems] = useState([]);
 
   const debouncedSearchKey = useDebounce(searchKey);
 
@@ -39,17 +38,9 @@ const ProductList = () => {
     return <PageLoader />;
   }
 
-  const toggleIsInCart = slug =>
-    setCartItems(prevCartItems =>
-      prevCartItems.includes(slug)
-        ? without([slug], cartItems)
-        : [slug, ...cartItems]
-    );
-
   return (
     <div className="flex h-screen flex-col">
       <Header
-        cartItemsCount={cartItems.length}
         shouldShowBackButton={false}
         title="Smile Cart"
         actionBlock={
@@ -72,12 +63,10 @@ const ProductList = () => {
           {products.map(product => (
             <ProductListItem
               imageUrl={product.image_url}
-              isInCart={cartItems.includes(product.slug)}
               key={product.slug}
               name={product.name}
               offerPrice={product.offer_price}
               slug={product.slug}
-              toggleIsInCart={() => toggleIsInCart(product.slug)}
             />
           ))}
         </div>
