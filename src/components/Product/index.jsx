@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 
 import productsApi from "apis/products";
-import { Header, PageNotFound, PageLoader } from "components/commons";
-import AddToCart from "components/commons/AddToCart";
+import {
+  Header,
+  PageNotFound,
+  PageLoader,
+  AddToCart,
+} from "components/commons";
 import { Typography } from "neetoui";
 import { append, isNotNil } from "ramda";
 import { useParams } from "react-router-dom";
@@ -39,6 +43,7 @@ const Product = () => {
     offer_price: offerPrice,
     image_url: imageUrl,
     image_urls: imageUrls,
+    available_quantity: availableQuantity,
   } = product;
   const discount = (((mrp - offerPrice) / mrp) * 100).toFixed(1);
 
@@ -71,7 +76,7 @@ const Product = () => {
           <Typography className="font-semibold text-green-600">
             {discount}% off
           </Typography>
-          <AddToCart {...{ slug }} />
+          <AddToCart {...{ availableQuantity, slug }} />
         </div>
       </div>
     </div>

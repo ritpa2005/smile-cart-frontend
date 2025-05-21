@@ -62,6 +62,7 @@ const ProductList = () => {
         <div className="grid grid-cols-2 justify-items-center gap-y-8 p-4 md:grid-cols-3 lg:grid-cols-4">
           {products.map(product => (
             <ProductListItem
+              availableQuantity={product.available_quantity}
               imageUrl={product.image_url}
               key={product.slug}
               name={product.name}

@@ -1,29 +1,25 @@
-import { useContext } from "react";
+import useSelectedQuantity from "hooks/useSelectedQuantity";
+import { Button, Toastr } from "neetoui";
+import { isNil } from "ramda";
 
-import { Button } from "neetoui";
-import { without } from "ramda";
-import CartItemsContext from "src/contexts/CartItemsContext";
+import ProductQuantity from "./ProductQuantity";
 
-const AddToCart = ({ slug }) => {
-  const [cartItems, setCartItems] = useContext(CartItemsContext);
+const AddToCart = ({ availableQuantity, slug }) => {
+  const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
 
-  const handleClick = e => {
-    e.stopPropagation();
-    e.preventDefault();
-    setCartItems(prevCartItems =>
-      prevCartItems.includes(slug)
-        ? without([slug], cartItems)
-        : [slug, ...cartItems]
-    );
+  const handleClick = () => {
+    if (availableQuantity >= 1) setSelectedQuantity(1);
+    else {
+      Toastr.error(`No units are available`, { autoClose: 2000 });
+      setSelectedQuantity(0);
+    }
   };
 
-  return (
-    <Button
-      label={cartItems.includes(slug) ? "Remove from cart" : "Add to cart"}
-      size="large"
-      onClick={handleClick}
-    />
-  );
+  if (isNil(selectedQuantity)) {
+    return <Button label="Add to cart" size="large" onClick={handleClick} />;
+  }
+
+  return <ProductQuantity {...{ slug, availableQuantity }} />;
 };
 
 export default AddToCart;
