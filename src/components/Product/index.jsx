@@ -1,26 +1,32 @@
 import { useState, useEffect } from "react";
 
 import productsApi from "apis/products";
-import { Typography, Spinner } from "neetoui";
+import { Header, PageNotFound, PageLoader } from "components/commons";
+import { Typography } from "neetoui";
 import { append, isNotNil } from "ramda";
+import { useParams } from "react-router-dom";
 
 import Carousel from "./Carousel";
 
 const Product = () => {
   const [product, setProduct] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
+  const { slug } = useParams();
   const fetchProduct = async () => {
     try {
-      const product = await productsApi.show();
+      const product = await productsApi.show(slug);
       setProduct(product);
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      setIsError(true);
+      console.log(e);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchProduct();
   }, []);
@@ -36,19 +42,14 @@ const Product = () => {
   const discount = (((mrp - offerPrice) / mrp) * 100).toFixed(1);
 
   if (isLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+    return <PageLoader />;
   }
+
+  if (isError) return <PageNotFound />;
 
   return (
     <div className="px-6 pb-6">
-      <div>
-        <Typography className="py-2 text-4xl font-semibold">{name}</Typography>
-        <hr className="border-2 border-black" style={{ transform: "90deg" }} />
-      </div>
+      <Header title={name} />
       <div className="mt-6 flex gap-4">
         <div className="w-2/5">
           {isNotNil(imageUrls) ? (

@@ -7,12 +7,6 @@ import { Button } from "neetoui";
 const Carousel = ({ imageUrls, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(handleNext, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const handleNext = () => {
     // const nextIndex = (currentIndex + 1) % imageUrls.length;
     // setCurrentIndex(nextIndex);
@@ -26,6 +20,13 @@ const Carousel = ({ imageUrls, title }) => {
       currIndex => (currIndex - 1 + imageUrls.length) % imageUrls.length
     );
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const interval = setInterval(handleNext, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex flex-col items-center">
