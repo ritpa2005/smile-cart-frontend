@@ -1,7 +1,9 @@
 import classNames from "classnames";
 import BuyNow from "components/commons/BuyNow";
+import { t } from "i18next";
 import { Typography } from "neetoui";
 import { keys } from "ramda";
+import { Trans } from "react-i18next";
 import useCartItemsStore from "stores/useCartItemsStore";
 
 const PriceCard = ({ totalMrp, totalOfferPrice }) => {
@@ -18,21 +20,26 @@ const PriceCard = ({ totalMrp, totalOfferPrice }) => {
           "line-through": isDiscountPresent,
         })}
       >
-        Total MRP: <span>${totalMrp}</span>
+        <Trans i18nKey="totalMrp" />
       </Typography>
       {isDiscountPresent && (
         <>
           <Typography className="flex justify-between text-green-700">
-            Total discounts:{" "}
-            <span>
-              ${totalDiscounts} ({discountPercentage}%)
-            </span>
+            <Trans
+              components={{ span: <span /> }}
+              i18nKey="totalDiscounts"
+              values={{ discounts: totalDiscounts, discountPercentage }}
+            />
           </Typography>
           <Typography className="flex justify-between">
-            Total offer price: <span>${totalOfferPrice}</span>
+            <Trans
+              components={{ span: <span /> }}
+              i18nKey="offerPrice"
+              values={{ offerPrice: totalOfferPrice }}
+            />
           </Typography>
           <span className="neeto-ui-text-gray-500 text-sm">
-            {itemsCount} item(s)
+            {t("itemCount", { count: itemsCount })}
           </span>
         </>
       )}
