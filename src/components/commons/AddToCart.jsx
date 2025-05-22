@@ -1,11 +1,17 @@
-import useSelectedQuantity from "hooks/useSelectedQuantity";
 import { Button, Toastr } from "neetoui";
 import { isNil } from "ramda";
+import useCartItemsStore from "stores/useCartItemsStore";
+import { shallow } from "zustand/shallow";
 
 import ProductQuantity from "./ProductQuantity";
 
 const AddToCart = ({ availableQuantity, slug }) => {
-  const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
+  const [selectedQuantity, setQuantity] = useCartItemsStore(
+    state => [state.cartItems[slug], state.setSelectedQuantity],
+    shallow
+  );
+
+  const setSelectedQuantity = q => setQuantity(slug, String(q));
 
   const handleClick = () => {
     if (availableQuantity >= 1) setSelectedQuantity(1);
@@ -16,7 +22,14 @@ const AddToCart = ({ availableQuantity, slug }) => {
   };
 
   if (isNil(selectedQuantity)) {
-    return <Button label="Add to cart" size="large" onClick={handleClick} />;
+    return (
+      <Button
+        className="flex-shrink-0"
+        label="Add to cart"
+        size="medium"
+        onClick={handleClick}
+      />
+    );
   }
 
   return <ProductQuantity {...{ slug, availableQuantity }} />;

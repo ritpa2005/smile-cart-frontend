@@ -6,6 +6,7 @@ import {
   PageNotFound,
   PageLoader,
   AddToCart,
+  BuyNow,
 } from "components/commons";
 import { Typography } from "neetoui";
 import { append, isNotNil } from "ramda";
@@ -76,7 +77,10 @@ const Product = () => {
           <Typography className="font-semibold text-green-600">
             {discount}% off
           </Typography>
-          <AddToCart {...{ availableQuantity, slug }} />
+          <div className="flex space-x-10">
+            <AddToCart {...{ availableQuantity, slug }} />
+            <BuyNow onClick={() => {}} />
+          </div>
         </div>
       </div>
     </div>
