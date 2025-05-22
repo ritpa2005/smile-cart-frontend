@@ -7,7 +7,6 @@ import { cartTotalOf } from "components/utils";
 import { NoData, Toastr } from "neetoui";
 import { keys, isEmpty } from "ramda";
 import useCartItemsStore from "stores/useCartItemsStore";
-import { shallow } from "zustand/shallow";
 
 import PriceCard from "./PriceCard";
 import ProductCard from "./ProductCard";
@@ -16,17 +15,15 @@ const Cart = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [cartItems, setSelectedQuantity, removeCartItem] = useCartItemsStore(
-    state => [state.cartItems, state.setSelectedQuantity, state.removeCartItem],
-    shallow
-  );
+  const { cartItems, setSelectedQuantity } = useCartItemsStore();
 
   const totalMrp = cartTotalOf(products, "mrp");
   const totalOfferPrice = cartTotalOf(products, "offer_price");
 
+  const slugs = keys(cartItems);
+
   const fetchCartProducts = async () => {
     try {
-      const slugs = keys(cartItems);
       const responses = await Promise.all(
         slugs.map(slug => productsApi.show(slug))
       );
@@ -41,8 +38,6 @@ const Cart = () => {
             `${name} is no longer available and has been removed from the cart`,
             { autoClose: 2000 }
           );
-          removeCartItem(slug);
-          fetchCartProducts();
         }
       });
     } catch (error) {

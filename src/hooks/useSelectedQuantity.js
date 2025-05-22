@@ -1,9 +1,10 @@
+import { paths } from "ramda";
 import useCartItemsStore from "stores/useCartItemsStore";
 import { shallow } from "zustand/shallow";
 
 const useSelectedQuantity = slug => {
   const [selectedQuantity, setSelectedQuantity] = useCartItemsStore(
-    state => [state.cartItems[slug], state.setSelectedQuantity],
+    paths([["cartItems", slug], ["setSelectedQuantity"]]),
     shallow
   );
 

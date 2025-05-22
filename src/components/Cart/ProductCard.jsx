@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { AddToCart } from "components/commons";
+import ProductQuantity from "components/commons/ProductQuantity";
 import { Delete } from "neetoicons";
 import { Typography, Alert } from "neetoui";
 import { prop } from "ramda";
@@ -30,7 +30,7 @@ const ProductCard = ({
           <Typography style="body2">Offer price: ${offerPrice}</Typography>
         </div>
         <div className="flex flex-shrink-0 items-center space-x-2">
-          <AddToCart {...{ availableQuantity, slug }} />
+          <ProductQuantity {...{ availableQuantity, slug }} />
           <Delete
             className="cursor-pointer"
             onClick={() => setShouldShowDeleteAlert(true)}
@@ -48,6 +48,7 @@ const ProductCard = ({
             onClose={() => setShouldShowDeleteAlert(false)}
             onSubmit={() => {
               removeCartItem(slug);
+              console.log(localStorage.getItem("cart-items-store"));
               setShouldShowDeleteAlert(false);
             }}
           />

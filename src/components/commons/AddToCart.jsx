@@ -1,17 +1,11 @@
+import useSelectedQuantity from "hooks/useSelectedQuantity";
 import { Button, Toastr } from "neetoui";
 import { isNil } from "ramda";
-import useCartItemsStore from "stores/useCartItemsStore";
-import { shallow } from "zustand/shallow";
 
 import ProductQuantity from "./ProductQuantity";
 
 const AddToCart = ({ availableQuantity, slug }) => {
-  const [selectedQuantity, setQuantity] = useCartItemsStore(
-    state => [state.cartItems[slug], state.setSelectedQuantity],
-    shallow
-  );
-
-  const setSelectedQuantity = q => setQuantity(slug, String(q));
+  const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
 
   const handleClick = () => {
     if (availableQuantity >= 1) setSelectedQuantity(1);

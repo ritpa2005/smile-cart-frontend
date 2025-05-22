@@ -1,6 +1,7 @@
 import { useRef } from "react";
 
 import { TooltipWrapper } from "components/commons";
+import { VALID_COUNT_REGEX } from "components/constants";
 import useSelectedQuantity from "hooks/useSelectedQuantity";
 import { Button, Input, Toastr } from "neetoui";
 
@@ -24,8 +25,8 @@ const ProductQuantity = ({ slug, availableQuantity }) => {
       });
       setSelectedQuantity(availableQuantity);
       countInputFocus.current.blur();
-    } else {
-      setSelectedQuantity(Number(value));
+    } else if (VALID_COUNT_REGEX.test(value)) {
+      setSelectedQuantity(value);
     }
   };
 
