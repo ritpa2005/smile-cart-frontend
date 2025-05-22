@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-
-import productsApi from "apis/products";
 import {
   Header,
   PageNotFound,
@@ -8,34 +5,16 @@ import {
   AddToCart,
   BuyNow,
 } from "components/commons";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import { Typography } from "neetoui";
-import { append, isNotNil } from "ramda";
+import { isNotNil } from "ramda";
 import { useParams } from "react-router-dom";
 
 import Carousel from "./Carousel";
 
 const Product = () => {
-  const [product, setProduct] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-
   const { slug } = useParams();
-  const fetchProduct = async () => {
-    try {
-      const product = await productsApi.show(slug);
-      setProduct(product);
-    } catch (e) {
-      setIsError(true);
-      console.log(e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    fetchProduct();
-  }, []);
+  const { data: product = {}, isLoading, isError } = useShowProduct(slug);
 
   const {
     name,
@@ -44,7 +23,6 @@ const Product = () => {
     offer_price: offerPrice,
     image_url: imageUrl,
     image_urls: imageUrls,
-    available_quantity: availableQuantity,
   } = product;
   const discount = (((mrp - offerPrice) / mrp) * 100).toFixed(1);
 
@@ -60,10 +38,7 @@ const Product = () => {
       <div className="mt-6 flex gap-4">
         <div className="w-2/5">
           {isNotNil(imageUrls) ? (
-            <Carousel
-              imageUrls={append(imageUrl, imageUrls)}
-              title="Infinix Inbook"
-            />
+            <Carousel />
           ) : (
             <img alt={name} className="w-48" src={imageUrl} />
           )}
@@ -78,7 +53,7 @@ const Product = () => {
             {discount}% off
           </Typography>
           <div className="flex space-x-10">
-            <AddToCart {...{ availableQuantity, slug }} />
+            <AddToCart {...{ slug }} />
             <BuyNow onClick={() => {}} />
           </div>
         </div>

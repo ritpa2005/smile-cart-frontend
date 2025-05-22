@@ -2,13 +2,7 @@ import AddToCart from "components/commons/AddToCart";
 import { Typography } from "neetoui";
 import { Link } from "react-router-dom";
 
-const ProductListItem = ({
-  imageUrl,
-  name,
-  offerPrice,
-  slug,
-  availableQuantity,
-}) => (
+const ProductListItem = ({ imageUrl, name, offerPrice, slug }) => (
   <div className="neeto-ui-border-black neeto-ui-rounded-xl flex w-48 flex-col items-center justify-between border p-4">
     <Link
       className="flex w-48 flex-col items-center justify-between"
@@ -20,7 +14,7 @@ const ProductListItem = ({
       </Typography>
       <Typography>${offerPrice}</Typography>
     </Link>
-    <AddToCart {...{ availableQuantity, slug }} />
+    <AddToCart {...{ slug }} />
   </div>
 );
 

@@ -1,11 +1,15 @@
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import useSelectedQuantity from "hooks/useSelectedQuantity";
 import { Button, Toastr } from "neetoui";
 import { isNil } from "ramda";
 
 import ProductQuantity from "./ProductQuantity";
 
-const AddToCart = ({ availableQuantity, slug }) => {
+const AddToCart = ({ slug }) => {
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
+
+  const { data: product = {} } = useShowProduct(slug);
+  const { available_quantity: availableQuantity } = product;
 
   const handleClick = () => {
     if (availableQuantity >= 1) setSelectedQuantity(1);
@@ -26,7 +30,7 @@ const AddToCart = ({ availableQuantity, slug }) => {
     );
   }
 
-  return <ProductQuantity {...{ slug, availableQuantity }} />;
+  return <ProductQuantity {...{ slug }} />;
 };
 
 export default AddToCart;
