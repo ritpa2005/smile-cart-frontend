@@ -2,7 +2,7 @@ import { Button } from "neetoui";
 import { useTranslation } from "react-i18next";
 import routes from "routes";
 
-const BuyNow = onClick => {
+const BuyNow = () => {
   const { t } = useTranslation();
 
   return (
@@ -11,7 +11,6 @@ const BuyNow = onClick => {
       label={t("buyNow")}
       size="large"
       to={routes.checkout}
-      onClick={onClick}
     />
   );
 };
