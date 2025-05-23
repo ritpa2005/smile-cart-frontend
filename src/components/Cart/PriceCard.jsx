@@ -20,7 +20,11 @@ const PriceCard = ({ totalMrp, totalOfferPrice }) => {
           "line-through": isDiscountPresent,
         })}
       >
-        <Trans i18nKey="totalMrp" />
+        <Trans
+          components={{ typography: <span /> }}
+          i18nKey="totalMrp"
+          values={{ mrp: totalMrp }}
+        />
       </Typography>
       {isDiscountPresent && (
         <>
