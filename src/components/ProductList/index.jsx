@@ -21,6 +21,15 @@ const ProductList = () => {
 
   const [searchKey, setSearchKey] = useState(searchTerm);
 
+  const {
+    data: { products = [], total_products_count: totalProductsCount } = {},
+    isLoading,
+  } = useFetchProducts({
+    searchTerm,
+    page: Number(page) || DEFAULT_PAGE_INDEX,
+    pageSize: Number(pageSize) || DEFAULT_PAGE_SIZE,
+  });
+
   const history = useHistory();
   const handlePageNavigation = page =>
     history.replace(
@@ -40,13 +49,6 @@ const ProductList = () => {
 
     history.replace(buildUrl(routes.products.index, filterNonNull(params)));
   });
-
-  const { data: { products = [], totalProductsCount } = {}, isLoading } =
-    useFetchProducts({
-      searchTerm,
-      page: Number(page) || DEFAULT_PAGE_INDEX,
-      pageSize: Number(pageSize) || DEFAULT_PAGE_SIZE,
-    });
 
   if (isLoading) {
     return <PageLoader />;

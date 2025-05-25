@@ -1,4 +1,5 @@
 import { cartTotalOf } from "components/utils";
+import { useFormikContext } from "formik";
 import { useFetchCartProducts } from "hooks/reactQuery/useProductsApi";
 import { Button } from "neetoui";
 import { keys } from "ramda";
@@ -17,6 +18,8 @@ const Items = ({ isSubmitDisabled }) => {
   const { data: products = [] } = useFetchCartProducts(slugs);
 
   const totalCheckoutPrice = cartTotalOf(products, "offer_price");
+
+  const { isValid, isSubmitting } = useFormikContext();
 
   return (
     <div className="flex h-full flex-col p-10">
@@ -40,7 +43,7 @@ const Items = ({ isSubmitDisabled }) => {
       <div className="mt-auto flex justify-center">
         <Button
           className="bg-neutral-800 w-1/3 justify-center"
-          disabled={isSubmitDisabled}
+          disabled={isSubmitDisabled || !isValid || isSubmitting}
           label={t("confirmOrder")}
           type="submit"
         />

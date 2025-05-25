@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 
 import classNames from "classnames";
 import { useShowProduct } from "hooks/reactQuery/useProductsApi";
@@ -9,12 +9,15 @@ import { useParams } from "react-router-dom";
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const timerRef = useRef(null);
 
   const handleNext = () => {
+    resetTimer();
     setCurrentIndex(currIndex => (currIndex + 1) % imageUrls.length);
   };
 
   const handlePrevious = () => {
+    resetTimer();
     setCurrentIndex(
       currIndex => (currIndex - 1 + imageUrls.length) % imageUrls.length
     );
@@ -25,12 +28,16 @@ const Carousel = () => {
     useShowProduct(slug);
   const imageUrls = append(imageUrl, partialImageUrls);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    const interval = setInterval(handleNext, 3000);
+    timerRef.current = setInterval(handleNext, 3000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(timerRef.current);
   }, []);
+
+  const resetTimer = () => {
+    clearInterval(timerRef.current);
+    timerRef.current = setInterval(handleNext, 3000);
+  };
 
   return (
     <div className="flex flex-col items-center">

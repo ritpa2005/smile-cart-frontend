@@ -68,9 +68,10 @@ const Checkout = () => {
       {
         onSuccess: () => {
           setToLocalStorage(CHECKOUT_LOCAL_STORAGE_KEY, dataToPersist);
+          setIsSubmitDisabled(false);
           redirectToHome();
         },
-        onError: () => setIsSubmitDisabled(false),
+        onError: () => setIsSubmitDisabled(true),
       }
     );
   };
